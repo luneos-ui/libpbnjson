@@ -28,7 +28,7 @@ endif()
 
 if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
 	# fmessage-length=0: Make sure that errors & messages are printed on 1 line
-	webos_add_compiler_flags(ALL -fmessage-length=0 -Wall)
+	webos_add_compiler_flags(ALL -fmessage-length=0 -Wall -Wno-int-conversion -std=gnu17)
 	webos_add_compiler_flags(DEBUG -O0 -DDEBUG -D_DEBUG -DPJSON_LOG_INFO -DPJSON_LOG_STDOUT)
 	webos_add_compiler_flags(RELEASE -DNDEBUG -g)
 else()

@@ -24,17 +24,23 @@ add_custom_target(
 	)
 
 add_custom_command(
-	SOURCE json_schema_grammar.y
-	COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/apply_lemon.sh
-		${LEMON}
-		${CMAKE_CURRENT_BINARY_DIR}
-		${CMAKE_CURRENT_SOURCE_DIR}
-		json_schema_grammar.y
-	TARGET json_schema_grammar
-	OUTPUTS ${CMAKE_CURRENT_BINARY_DIR}/json_schema_grammar.c
-	        ${CMAKE_CURRENT_BINARY_DIR}/json_schema_grammar.h
-	DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/json_schema_grammar.y
-	        ${CMAKE_CURRENT_SOURCE_DIR}/apply_lemon.sh
+	OUTPUT
+        ${CMAKE_CURRENT_BINARY_DIR}/json_schema_grammar.c
+        ${CMAKE_CURRENT_BINARY_DIR}/json_schema_grammar.h
+
+	COMMAND
+        ${CMAKE_CURRENT_SOURCE_DIR}/apply_lemon.sh
+        ${LEMON}
+        ${CMAKE_CURRENT_BINARY_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        json_schema_grammar.y
+
+	DEPENDS
+        ${CMAKE_CURRENT_SOURCE_DIR}/json_schema_grammar.y
+        ${CMAKE_CURRENT_SOURCE_DIR}/apply_lemon.sh
+
+	WORKING_DIRECTORY
+	${CMAKE_CURRENT_BINARY_DIR}
 	)
 
 set(grammar_c ${CMAKE_CURRENT_BINARY_DIR}/json_schema_grammar.c)
@@ -54,11 +60,14 @@ add_custom_target(
 function(gperf_generate source target)
 	add_custom_target(${target} echo "Creating ${target}")
 	add_custom_command(
-		SOURCE ${source}
-		TARGET ${target}
-		COMMAND ${GPERF} -t ${CMAKE_CURRENT_SOURCE_DIR}/${source} > ${target}
-		OUTPUTS ${target}
-		DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${source}
+		OUTPUT
+		${target}
+
+		COMMAND
+		${GPERF} -t ${CMAKE_CURRENT_SOURCE_DIR}/${source} > ${target}
+
+		DEPENDS
+		${CMAKE_CURRENT_SOURCE_DIR}/${source}
 		)
 endfunction()
 
